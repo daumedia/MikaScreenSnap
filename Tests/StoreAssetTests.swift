@@ -201,6 +201,29 @@ final class StoreAssetTests: XCTestCase {
         }
     }
 
+    /// NEW, out of the 3.6.0 rejection (guideline 5.1.1(iv)): the screen that runs ahead of
+    /// the system prompt may explain the permission, it may not campaign for it. App Review
+    /// named the button — it read *Grant Access* — and asked for »Continue« or »Next«.
+    ///
+    /// Comments are stripped before the scan, because the reason for this test is written
+    /// in the file it checks.
+    func testThePermissionScreenDoesNotCampaignForTheAnswer() throws {
+        let code = try source("Sources/Onboarding/PermissionScreen.swift")
+            .split(separator: "\n", omittingEmptySubsequences: false)
+            .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }
+            .joined(separator: "\n")
+
+        for pitch in ["Grant Access", "Allow Access", "Enable Access",
+                      "Grant Permission", "Allow Screen Recording"] {
+            XCTAssertFalse(code.localizedCaseInsensitiveContains(pitch), """
+                PermissionScreen.swift puts »\(pitch)« ahead of the system prompt. \
+                Guideline 5.1.1(iv) bounced 3.6.0 over exactly that — the label stays neutral.
+                """)
+        }
+        XCTAssertTrue(code.contains("\"Continue\""),
+                      "the neutral label App Review asked for is gone from PermissionScreen.swift")
+    }
+
     // MARK: - Screenshots
 
     func testEveryScreenshotHasThePromisedSizeAndNoAlpha() throws {

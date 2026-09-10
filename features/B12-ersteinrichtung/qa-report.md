@@ -2,6 +2,12 @@
 
 Stand: 2026-08-25 · Geprüft gegen `spec.md` vom 2026-08-25 · Fassung 3.5.0
 
+> **Nachtrag 2026-09-10:** Die Berechtigungsseite hat sich seit diesem Lauf geändert. App
+> Review wies 3.6.0 unter Richtlinie 5.1.1(iv) zurück, weil die Schaltfläche vor dem
+> Systemdialog *Grant Access* hieß; sie heißt jetzt *Continue*, und die Systemeinstellung
+> öffnet sich nur noch auf Wunsch. **AK-05, AK-07 und AK-15 sind damit neu zu prüfen**,
+> dazu die neuen AK-19 und AK-20. Unten stehen sie im Stand vom 2026-08-25.
+
 ## Fazit
 
 **Production-ready: ja, mit einer Pflichtprüfung**
@@ -34,7 +40,7 @@ die Pflichtprüfung.
 | AK-02 Drei oder zwei Seiten | ⚠️ nicht prüfbar | dito |
 | AK-03 Punktanzeige | ⚠️ nicht prüfbar | Oberflächenverhalten |
 | AK-04 Übergang zur nächsten Seite | ⚠️ nicht prüfbar | dito |
-| AK-05 *Grant Access* öffnet die Systemeinstellung | ⚠️ nicht prüfbar | braucht die Systemabfrage |
+| AK-05 *Open System Settings* öffnet die Systemeinstellung | ⚠️ nicht prüfbar | braucht die Systemabfrage |
 | AK-06 Erkennung im Sekundentakt | ⚠️ nicht prüfbar | dito |
 | AK-07 *Skip for now* | ⚠️ nicht prüfbar | Oberflächenverhalten |
 | AK-08 Sieben Kombinationen auf der letzten Seite | ✅ bestanden | `HotkeyBindingTests` belegt, dass genau sieben Aktionen mit eigenen Voreinstellungen existieren |
@@ -78,7 +84,7 @@ Testlauf nichts zu suchen haben (BF-06 der Spec, akzeptiert).
 `/sdd-deploy B12` — **mit dieser Pflichtprüfung, die ein frisches Benutzerkonto braucht:**
 
 1. Neues Benutzerkonto anlegen, 3.5.0 installieren, starten.
-2. Erscheint der Systemdialog nach *Grant Access*?
+2. Erscheint der Systemdialog nach *Continue*?
 3. Steht die Anwendung danach in *Systemeinstellungen → Datenschutz → Bildschirmaufnahme*?
 
 Punkt 3 ist der eigentliche Befund: Vor 3.5.0 stand sie dort zu diesem Zeitpunkt nicht.

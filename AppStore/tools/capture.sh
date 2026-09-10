@@ -183,8 +183,9 @@ if [ "$DIREKT" = "0" ]; then
        „Mika+ScreenSnap", und der gehört der Direktfassung aus /Applications.
        Beide Fassungen tragen dieselbe Bundle-Kennung; solange die Direktfassung
        installiert ist, bekam die Store-Fassung in einem Versuch am 2026-09-05
-       keinen eigenen Eintrag — auch nicht, nachdem „Grant Access" im
-       Einrichtungsfenster `CGRequestScreenCaptureAccess()` ausgelöst hatte.
+       keinen eigenen Eintrag — auch nicht, nachdem die Hauptschaltfläche im
+       Einrichtungsfenster `CGRequestScreenCaptureAccess()` ausgelöst hatte
+       (sie hieß damals „Grant Access", seit 2026-09-10 „Continue").
        Den vorhandenen Schalter umzulegen hilft der Store-Fassung nicht: Sie
        zeigt danach weiter ihr Einrichtungsfenster.
 

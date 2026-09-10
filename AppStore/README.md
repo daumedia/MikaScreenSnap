@@ -224,10 +224,11 @@ In der Liste steht **ein** Eintrag „Mika+ScreenSnap", und er gehört der Direk
 `/Applications` — nachweisbar daran, dass sie mit ihm Zugriff hat, während die
 Store-Fassung weiter ihr Einrichtungsfenster zeigt. Beide tragen dieselbe Bundle-Kennung.
 Nach einem `tccutil reset` verschwand der Eintrag, und **kein** Weg brachte einen für die
-Store-Fassung zurück: weder „Grant Access" im Einrichtungsfenster (das
-`CGRequestScreenCaptureAccess()` aufruft und danach die Einstellungen öffnet — die Liste
-blieb leer), noch dasselbe mit echt signierter Fassung, noch nachdem die Direktfassung
-vorübergehend aus `/Applications` weggeschoben war.
+Store-Fassung zurück: weder die Hauptschaltfläche im Einrichtungsfenster (sie hieß damals
+„Grant Access" und öffnete nach `CGRequestScreenCaptureAccess()` selbsttätig die
+Einstellungen; seit 2026-09-10 heißt sie „Continue" und öffnet nichts von sich aus — die
+Liste blieb so und so leer), noch dasselbe mit echt signierter Fassung, noch nachdem die
+Direktfassung vorübergehend aus `/Applications` weggeschoben war.
 
 Der Kommentar in `Sources/Onboarding/PermissionScreen.swift` sagt, `CGRequestScreenCaptureAccess`
 registriere die App in der Liste. Für die Direktfassung mag das stimmen; für die
