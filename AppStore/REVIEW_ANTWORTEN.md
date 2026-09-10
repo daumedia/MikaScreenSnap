@@ -10,7 +10,7 @@ nachlesen will, findet hier, was geantwortet wurde und warum.
 ## 3.6.0 · abgelehnt 2026-09-09 · Richtlinie 5.1.1(iv)
 
 **Submission ID:** c4bb3a99-b517-4e8e-b61c-3254960ae22a
-**Geprüfte Fassung:** 3.6.0 (3.6.0) · **Antwort mit Build:** 3.6.0.1
+**Geprüfte Fassung:** 3.6.0 (3.6.0) · **Antwort mit Build:** 3.6.1
 
 ### Was beanstandet wurde
 
@@ -32,14 +32,18 @@ nachlesen will, findet hier, was geantwortet wurde und warum.
   Ein Bildschirm, der erklärt, ist zulässig — einer, der wirbt, nicht.
 - `StoreAssetTests.testThePermissionScreenDoesNotCampaignForTheAnswer` hält die neutrale
   Beschriftung fest, damit sie nicht zurückkommt.
-- `CFBundleVersion` auf `3.6.0.1`, Marketing-Version bleibt 3.6.0.
+- `CFBundleVersion` auf `3.6.1`, Marketing-Version bleibt 3.6.0. **Nicht `3.6.0.1`** —
+  der Upload wies das mit Fehler 90257 ab: Beide Versionsschlüssel nehmen höchstens drei
+  punktgetrennte ganze Zahlen. Die Build-Nummer darf von der Marketing-Version abweichen,
+  sie muss nur höher sein als jede zuvor hochgeladene. Nächste Runde also 3.6.2.
+  `StoreAssetTests.testBothVersionKeysHaveAShapeAppStoreConnectAccepts` hält die Form fest.
 
 ### Antworttext
 
 ```text
 Thank you for the review.
 
-In build 3.6.0.1 the button shown before the Screen Recording prompt is labelled
+In build 3.6.1 the button shown before the Screen Recording prompt is labelled
 "Continue". The screen only explains what the permission is used for and states that
 captures never leave the user's Mac.
 

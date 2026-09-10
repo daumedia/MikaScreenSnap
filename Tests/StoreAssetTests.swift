@@ -224,6 +224,28 @@ final class StoreAssetTests: XCTestCase {
                       "the neutral label App Review asked for is gone from PermissionScreen.swift")
     }
 
+    /// NEW, out of upload error 90257: App Store Connect takes at most three
+    /// period-separated non-negative integers in either version key. A resubmission of the
+    /// same marketing version raises the build number, and `3.6.0.1` looked like the
+    /// smallest step — it was bounced by the upload, after the whole packaging run.
+    func testBothVersionKeysHaveAShapeAppStoreConnectAccepts() throws {
+        let plist = try source(infoPlistPath)
+        for key in ["CFBundleVersion", "CFBundleShortVersionString"] {
+            let value = try plistValue(key, in: plist)
+            let parts = value.split(separator: ".", omittingEmptySubsequences: false)
+            XCTAssertTrue((1...3).contains(parts.count), """
+                \(key) = »\(value)« has \(parts.count) components. At most three, \
+                period-separated — that is upload error 90257.
+                """)
+            for part in parts {
+                XCTAssertFalse(part.isEmpty, "\(key) = »\(value)« has an empty component")
+                XCTAssertTrue(part.allSatisfy { $0.isASCII && $0.isNumber }, """
+                    \(key) = »\(value)«: »\(part)« is not a non-negative integer.
+                    """)
+            }
+        }
+    }
+
     // MARK: - Screenshots
 
     func testEveryScreenshotHasThePromisedSizeAndNoAlpha() throws {
