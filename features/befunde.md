@@ -139,7 +139,7 @@ Die vier wichtigsten, die vor der Auslieferung manuell zu durchlaufen sind:
 |---|---|---|
 | Ausgeschlossenes Programm in allen sechs Aufnahmewegen | B02/AK-03 | die einzige Zugriffsregel der Anwendung; einer der sechs Wege, der doch etwas zeigt, ist ein Datenleck |
 | Ein Tastendruck nach zweimaliger Neubelegung | B10/AK-08 | der behobene Vervielfachungsfehler — zählbar, aber nur mit echtem Tastendruck |
-| Erstkontakt auf einem frischen Benutzerkonto | B12/AK-15 | steht die Anwendung nach *Grant Access* in der Systemliste? Vor 3.5.0 nicht |
+| Erstkontakt auf einem frischen Benutzerkonto | B12/AK-15 | steht die Anwendung nach *Continue* in der Systemliste? Vor 3.5.0 nicht |
 | Manipulierte Update-Signatur wird abgelehnt | B14/AK-05 | der einzige Weg, auf dem fremder Code auf den Rechner kommt |
 
 ## Behoben

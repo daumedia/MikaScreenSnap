@@ -1,6 +1,7 @@
 # B12 · Ersteinrichtung — Spezifikation
 
-Status: `rekonstruiert` · Stand: 2026-08-25 · **rückwirkend erfasst, Befunde bearbeitet in 3.5.0**
+Status: `rekonstruiert` · Stand: 2026-09-10 · **rückwirkend erfasst, Befunde bearbeitet in 3.5.0**
+· Berechtigungsseite überarbeitet nach der App-Review-Ablehnung von 3.6.0 (5.1.1(iv))
 
 > Beschrieben ist, **was der Code tut**. Vier der fünf markierten Kriterien sind behoben,
 > darunter der Grund für misslungene Erststarts.
@@ -42,14 +43,17 @@ einsatzbereit — oder der Nutzer weiß zumindest, was ihm fehlt.
   unteren Rand die Zahl der Seiten und die aktuelle Position.
 - **AK-04** · Angenommen, die Begrüßungsseite ist sichtbar, wenn *Weiter* gewählt wird, dann
   erscheint die nächste Seite mit einer Übergangsbewegung.
-- **AK-05** · Angenommen, die Berechtigungsseite ist sichtbar und die Berechtigung fehlt,
-  wenn *Open System Settings* gewählt wird, dann öffnet sich die Systemeinstellung für die
-  Bildschirmaufnahme.
+- **AK-05** · Angenommen, das System hat die Berechtigung abschlägig beantwortet, wenn
+  *Open System Settings* gewählt wird, dann öffnet sich die Systemeinstellung für die
+  Bildschirmaufnahme. **Vorher gibt es diese Schaltfläche nicht**, und die Anwendung öffnet
+  die Systemeinstellung zu keinem Zeitpunkt von sich aus.
 - **AK-06** · Angenommen, die Berechtigungsseite ist sichtbar, wenn die Berechtigung
   **während** der Anzeige erteilt wird, dann wechselt die Darstellung binnen einer Sekunde
   auf ein grünes Häkchen und blättert nach einer weiteren Sekunde selbsttätig weiter.
-- **AK-07** · Angenommen, die Berechtigungsseite ist sichtbar, wenn *Skip for now* gewählt
-  wird, dann geht es ohne Berechtigung weiter.
+- **AK-07** · Angenommen, die Berechtigungsseite ist sichtbar und das System wurde noch
+  nicht gefragt, wenn *Skip for now* gewählt wird, dann geht es ohne Berechtigung weiter.
+  Nach einer abschlägigen Antwort tritt an seine Stelle *Continue* — dieselbe Wirkung, nur
+  ohne die zweite Schaltfläche daneben.
 - **AK-08** · Angenommen, die letzte Seite ist sichtbar, wenn sie angezeigt wird, dann stehen
   dort alle sieben Tastenkombinationen und ein Schalter *Launch Mika+ScreenSnap at login*.
 - **AK-09** · Angenommen, die letzte Seite ist sichtbar, wenn *Done* gewählt wird, dann wird
@@ -72,10 +76,16 @@ einsatzbereit — oder der Nutzer weiß zumindest, was ihm fehlt.
 
 ### Berechtigung
 
-- **AK-15** · Angenommen, die Berechtigung fehlt, wenn auf der Berechtigungsseite *Grant
-  Access* gewählt wird, dann **fordert die Anwendung sie beim System an**; erst wenn das
-  Ansuchen abschlägig bleibt, öffnet sich die Systemeinstellung. Damit ist die Anwendung
-  dort in jedem Fall gelistet.
+- **AK-15** · Angenommen, die Berechtigung fehlt, wenn auf der Berechtigungsseite
+  *Continue* gewählt wird, dann **fordert die Anwendung sie beim System an**. Damit ist die
+  Anwendung in der Systemliste in jedem Fall gelistet.
+- **AK-19** · Angenommen, die Berechtigungsseite läuft dem Systemdialog voraus, wenn ihre
+  Hauptschaltfläche beschriftet wird, dann trägt sie eine neutrale Aufschrift (*Continue*)
+  — keine, die zur Erteilung auffordert. Festgehalten in `StoreAssetTests`,
+  Prüfung `testThePermissionScreenDoesNotCampaignForTheAnswer`.
+- **AK-20** · Angenommen, das Ansuchen bleibt abschlägig, wenn das feststeht, dann nennt die
+  Seite sachlich, was ohne die Berechtigung nicht geht, und bietet den Weg in die
+  Systemeinstellung an — sie geht ihn nicht selbst und fragt nicht nach.
 
 ### Datenschutz und Missbrauchsschutz
 
@@ -109,9 +119,12 @@ Stufe A.
 ### Behoben
 
 - **FB-01 · Die Berechtigung wurde nie angefordert** — behoben 2026-08-25.
-  `CGRequestScreenCaptureAccess()` wird über *Grant Access* aufgerufen; die
-  Systemeinstellung öffnet sich nur, wenn das Ansuchen nicht zum Ziel führt. **Dies war die
-  wahrscheinlichste Ursache für einen misslungenen ersten Start.**
+  `CGRequestScreenCaptureAccess()` wird über die Hauptschaltfläche aufgerufen. **Dies war
+  die wahrscheinlichste Ursache für einen misslungenen ersten Start.**
+- **FB-07 · Die Seite warb für die Antwort** — behoben 2026-09-10. App Review wies 3.6.0
+  unter Richtlinie 5.1.1(iv) zurück: Die Schaltfläche vor dem Systemdialog hieß *Grant
+  Access*. Sie heißt jetzt *Continue*; die Systemeinstellung öffnet sich nicht mehr
+  ungefragt nach einer Ablehnung, sondern auf Wunsch (AK-05, AK-19, AK-20).
 - **FB-02 · `permissionSkipped` war wirkungslos** — behoben 2026-08-25 durch Entfernen.
 - **FB-04 · Anzeigezustand und Wirkung des Anmeldestarts gingen auseinander** — behoben
   2026-08-25. Der Schalter wird aus `SMAppService` vorbelegt.
@@ -137,6 +150,7 @@ Keine offen.
 | OF-01 · Berechtigung anfordern? | ja — und die Systemeinstellung erst danach öffnen | 2026-08-25 |
 | OF-02 · Abbruch als „abgeschlossen" werten? | ja, siehe BF-03 | 2026-08-25 |
 | OF-03 · Anmeldestart voreingestellt an? | nein — der Schalter zeigt den Systemzustand | 2026-08-25 |
+| OF-04 · Nach einer Ablehnung die Systemeinstellung öffnen? | nein — nur auf Wunsch, sonst wirbt die Seite (5.1.1(iv)) | 2026-09-10 |
 
 ## Decision Log## Decision Log
 
