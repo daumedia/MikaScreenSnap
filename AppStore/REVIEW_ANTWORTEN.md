@@ -101,149 +101,55 @@ wörtlich; ein Zitat, das unter der angegebenen URL nicht steht, ist schlimmer a
 
 ### Antworttext
 
+**Das Feld im Resolution Center nimmt höchstens 4000 Zeichen.** Die erste Fassung hatte
+gut 8000 und wurde abgewiesen; die folgende hat 3970. Gekürzt wurden die Erläuterungen,
+nicht die Antworten: alle sieben Fragen sind weiterhin einzeln beantwortet, und die vier
+Zitate sind wörtlich — Auslassungen stehen als `[...]`, geprüft gegen die Live-Seite.
+
 ```text
-Thank you for the review. Answers to the seven questions, in order.
+Thank you for the review. Answers in order.
 
-1. APP FEATURES THAT USE SCREEN RECORDING
+1. FEATURES USING SCREEN RECORDING
 
-Mika+ScreenSnap is a screenshot utility. The permission is used only to take still
-screenshots the user explicitly asks for, each triggered by a keyboard shortcut or a
-menu bar command:
+Mika+ScreenSnap is a screenshot utility. Every use is a still image the user explicitly asks for, by keyboard shortcut or menu bar command: capture full screen, capture a dragged area, capture a clicked window, capture text (OCR on a selected area, recognised on device with Apple's Vision framework), and the colour picker (the colour of the pixel under the pointer). Annotation, redaction, pinning, history and the ruler work on an image already captured and request no further screen data.
 
-- Capture full screen (default ⌃⇧⌘3): one still image of the display the pointer is on.
-- Capture area (⌃⇧⌘4): one still image of a rectangle the user drags.
-- Capture window (⌃⇧⌘5): one still image of a window the user clicks.
-- Capture text / OCR (⇧⌘6): one still image of a selected area, from which text is
-  recognised on device with Apple's Vision framework.
-- Colour picker (⇧⌘7): the colour of the pixel under the pointer, read from one still
-  image per display taken when the picker opens.
+All of these call SCScreenshotManager.captureImage, which returns a single frame. The app never opens an SCStream, never records video and never captures audio; macOS simply files still capture under the "Screen & System Audio Recording" permission. There is no timed or background capture.
 
-Every other feature (annotation editor, redaction, pinning, history, ruler, preferences)
-operates on an image one of the above already produced and requests no further screen
-data.
+2. DATA COLLECTED
 
-Implementation detail that may help: all of these call SCScreenshotManager.captureImage
-from ScreenCaptureKit, which returns a single frame. The app never opens an SCStream,
-never records video and never captures audio — macOS simply files still screen capture
-under the "Screen & System Audio Recording" permission. There is no timed, scheduled or
-background capture: nothing is captured unless the user triggers it.
-
-2. WHAT DATA THE APP COLLECTS VIA SCREEN RECORDING
-
-Only the pixels of the region the user selected, at the moment they triggered the
-capture. Nothing else: no window titles, no list of running applications, no keystrokes,
-no audio, no device or user identifiers, no metadata beyond the image itself. Windows
-belonging to applications the user has added to the exclusion list are filtered out
-before the capture is taken, so they do not appear in the image.
-
-The app "collects" this only in the sense that it produces the picture the user asked
-for. None of it is collected by us: no screen data reaches the developer, and there is
-nowhere for it to go.
+Only the pixels of the region the user selected, at the moment they triggered the capture. No window titles, no list of running apps, no keystrokes, no audio, no identifiers. Windows of apps on the user's exclusion list are filtered out before capture. None of this reaches the developer.
 
 3. PURPOSES
 
-A single purpose: giving the user the screenshot they asked for — showing it, letting
-them annotate or redact it, and saving it to their disk or clipboard. OCR turns the
-captured pixels into text on the user's own Mac and places it on the clipboard; the
-colour picker turns a pixel into a colour value and places that on the clipboard.
-
-There are no further uses. Screen data is not used for analytics, advertising,
-profiling, personalisation, machine learning, or any developer-side purpose.
+One: giving the user the screenshot they asked for - showing it, letting them annotate or redact it, saving it to their disk or clipboard. OCR and the colour picker convert those same pixels to text or a colour value on the user's Mac. Screen data is never used for analytics, advertising, profiling or model training.
 
 4. SHARING WITH THIRD PARTIES
 
-No. The data is shared with no one.
+None. No analytics, crash reporting or advertising SDK, no third-party framework, no backend. The App Store build is sandboxed and does not request com.apple.security.network.client, so it cannot open an outbound connection at all. (The Sparkle updater used by the direct download from our website is excluded from this build at compile time and never transmitted image data.) A capture leaves the Mac only if the user sends it somewhere themselves.
 
-The App Store build contains no analytics SDK, no crash reporting SDK, no advertising
-SDK and no third-party framework of any kind. It has no backend, and the developer
-operates no service that could receive a screenshot. The build is sandboxed and does not
-request the com.apple.security.network.client entitlement, so it cannot open an outbound
-connection at all. (The Sparkle updater used by the direct download from our website is
-excluded from the App Store build at compile time; it only ever fetched a release feed
-and never transmitted image data.)
+5. STORAGE AND RETENTION
 
-A screenshot leaves the user's Mac only if the user saves it and sends it somewhere
-themselves.
+On the user's own Mac only:
+- Saved captures: the folder chosen during first run, reached via a security-scoped bookmark, plus a preview in a ".thumbnails" subfolder there.
+- Pinned screenshots: the app container (Application Support/MikaScreenSnap/PinnedScreenshots); closing a pin deletes the file at once.
+- Copied images, recognised text, colour values: the system clipboard.
+- Unsaved captures: memory only.
 
-5. WHERE THE INFORMATION IS STORED
+Files remain until the user deletes them. The history window is a view of that folder, not a second copy; the app expires nothing on its own. Source code: github.com/daumedia/MikaScreenSnap
 
-On the user's own Mac, and nowhere else:
+6. RELEVANT PRIVACY POLICY SECTIONS
 
-- Saved captures: the folder the user picks during first run, accessed through a
-  security-scoped bookmark (com.apple.security.files.user-selected.read-write), together
-  with a 200 px preview in a ".thumbnails" subfolder of that same folder.
-- Pinned screenshots: the app's own container, at
-  ~/Library/Containers/lu.daumedia.screensnap/Data/Library/Application Support/
-  MikaScreenSnap/PinnedScreenshots. Closing a pin deletes its file immediately.
-- Copied images, recognised text and colour values: the system clipboard.
-- Captures the user does not save: held in memory only, discarded when the editor closes.
+https://screensnap.daumedia.lu/privacy - "Screen recording data" (collection, use, sharing, storage and retention, under the headings "What is captured", "What it is used for", "Who it is shared with", "Where it is stored", "How long it is kept"), "Analytics", "The one network connection", "Permissions the app asks for".
 
-Retention: files remain until the user deletes them, and no longer. The history window
-is a view of the user's save folder rather than a second copy; the app expires nothing
-on its own and keeps no separate database of captures. "Delete all" in the history
-window removes the images and their thumbnails from disk.
+7. SPECIFIC LANGUAGE
 
-The complete source code is public at https://github.com/daumedia/MikaScreenSnap, so
-every statement above can be verified directly.
+"Mika+ScreenSnap needs it for one thing: to take the screenshot you asked for. It records no video and no audio. Every capture is a single still image, taken at the moment you press a shortcut or choose a command in the menu bar — never in the background, never on a timer."
 
-6. RELEVANT SECTIONS OF THE PRIVACY POLICY
+"Who it is shared with. Nobody. There is no server, no third-party SDK and no analytics provider to share it with. Captures leave your Mac only if you send them somewhere yourself. Nothing is uploaded, and the app has no code that would be able to do so [...]"
 
-Privacy policy: https://screensnap.daumedia.lu/privacy
+"Where it is stored. On your own Mac, in the folder you pick during setup [...] Recognised text and sampled colours go to your clipboard and are never written to disk."
 
-- "Screen recording data" — collection, use, disclosure and sharing, storage location
-  and retention, under the paragraph headings "What is captured", "What it is used for",
-  "Who it is shared with", "Where it is stored" and "How long it is kept".
-- "Analytics" — that the app itself collects none.
-- "The one network connection" — that the App Store version makes no network connection
-  of its own.
-- "Permissions the app asks for" — the permission, its sole use, and the permissions the
-  app does not request.
+"How long it is kept. For as long as you keep the files, and no longer. The app expires nothing behind your back and keeps no second copy [...] a screenshot exists until you delete it — in that window, or in the Finder."
 
-7. SPECIFIC LANGUAGE CONCERNING SCREEN RECORDING DATA
-
-Quoted verbatim from the "Screen recording data" section:
-
-"macOS calls the permission Screen & System Audio Recording, and asks for it before any
-app may read what is on your display. Mika+ScreenSnap needs it for one thing: to take
-the screenshot you asked for. It records no video and no audio. Every capture is a
-single still image, taken at the moment you press a shortcut or choose a command in the
-menu bar — never in the background, never on a timer."
-
-"What is captured. The pixels of the region you chose: the whole display, an area you
-drag, or a window you click. Nothing else is read, and nothing about your other apps is
-recorded. Windows belonging to apps on your exclusion list are removed from the picture
-before the app ever sees it."
-
-"What it is used for. Showing you the capture, letting you annotate it, and saving or
-copying it — that is the whole purpose. Text recognition (OCR) and the colour picker
-work on those same pixels, on your Mac, using Apple's Vision framework. Screen data is
-never used for analytics, advertising, profiling, or training any model."
-
-"Who it is shared with. Nobody. There is no server, no third-party SDK and no analytics
-provider to share it with. Captures leave your Mac only if you send them somewhere
-yourself. Nothing is uploaded, and the app has no code that would be able to do so — you
-can verify this in the source."
-
-"Where it is stored. On your own Mac, in the folder you pick during setup, with a small
-preview image beside it in a .thumbnails subfolder so the history window has something
-to show. Pinned screenshots are held in the app's own Application Support folder until
-you close the pin. Recognised text and sampled colours go to your clipboard and are
-never written to disk. Your settings live in the app's preferences; they contain no
-image data."
-
-"How long it is kept. For as long as you keep the files, and no longer. The app expires
-nothing behind your back and keeps no second copy: the history window is a view of your
-save folder, so a screenshot exists until you delete it — in that window, or in the
-Finder. Delete all there removes every image in the folder along with the thumbnails.
-Closing a pinned screenshot deletes its stored image immediately. Captures you never
-save are held in memory only and are gone when you close the editor."
-
-And from "Permissions the app asks for":
-
-"Only Screen & System Audio Recording, which macOS requires before any app may read the
-contents of your display. It is used solely to take the screenshot you asked for.
-Despite the name of the permission, the app captures no audio and no video — it has no
-code for either."
-
-Please let us know if anything further would help.
+Happy to provide anything further.
 ```
