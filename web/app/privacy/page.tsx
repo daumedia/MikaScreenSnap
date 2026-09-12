@@ -45,12 +45,43 @@ export default function Privacy() {
             means.
           </p>
 
-          <Section title="Your screenshots">
+          <Section title="Screen recording data">
             <p>
-              Captures are held in memory while you edit them and written to a
-              folder you choose on your own Mac. Nothing is uploaded, and the
-              app has no code that would be able to do so — you can verify this
-              in the{" "}
+              macOS calls the permission{" "}
+              <em>Screen &amp; System Audio Recording</em>, and asks for it before any
+              app may read what is on your display. {product.name} needs it for one
+              thing: to take the screenshot you asked for. It records no video and no
+              audio. Every capture is a single still image, taken at the moment you
+              press a shortcut or choose a command in the menu bar — never in the
+              background, never on a timer.
+            </p>
+            <p>
+              <strong className="font-semibold text-foreground">
+                What is captured.
+              </strong>{" "}
+              The pixels of the region you chose: the whole display, an area you drag,
+              or a window you click. Nothing else is read, and nothing about your other
+              apps is recorded. Windows belonging to apps on your exclusion list are
+              removed from the picture before the app ever sees it.
+            </p>
+            <p>
+              <strong className="font-semibold text-foreground">
+                What it is used for.
+              </strong>{" "}
+              Showing you the capture, letting you annotate it, and saving or copying
+              it — that is the whole purpose. Text recognition (OCR) and the colour
+              picker work on those same pixels, on your Mac, using Apple&apos;s Vision
+              framework. Screen data is never used for analytics, advertising,
+              profiling, or training any model.
+            </p>
+            <p>
+              <strong className="font-semibold text-foreground">
+                Who it is shared with.
+              </strong>{" "}
+              Nobody. There is no server, no third-party SDK and no analytics provider
+              to share it with. Captures leave your Mac only if you send them somewhere
+              yourself. Nothing is uploaded, and the app has no code that would be able
+              to do so — you can verify this in the{" "}
               <a
                 href={product.repo}
                 className="text-teal-light underline underline-offset-4 hover:text-teal-lightest"
@@ -60,9 +91,28 @@ export default function Privacy() {
               .
             </p>
             <p>
-              Text recognised through OCR and colours sampled with the picker
-              are processed on-device using Apple&apos;s Vision framework and
-              placed on your clipboard. They are never transmitted.
+              <strong className="font-semibold text-foreground">
+                Where it is stored.
+              </strong>{" "}
+              On your own Mac, in the folder you pick during setup, with a small preview
+              image beside it in a <code className="rounded bg-surface px-1.5 py-0.5 font-mono text-[13px] text-teal-lightest">.thumbnails</code>{" "}
+              subfolder so the history window has something to show. Pinned screenshots
+              are held in the app&apos;s own Application Support folder until you close
+              the pin. Recognised text and sampled colours go to your clipboard and are
+              never written to disk. Your settings live in the app&apos;s preferences;
+              they contain no image data.
+            </p>
+            <p>
+              <strong className="font-semibold text-foreground">
+                How long it is kept.
+              </strong>{" "}
+              For as long as you keep the files, and no longer. The app expires nothing
+              behind your back and keeps no second copy: the history window is a view of
+              your save folder, so a screenshot exists until you delete it — in that
+              window, or in the Finder. <em>Delete all</em> there removes every image in
+              the folder along with the thumbnails. Closing a pinned screenshot deletes
+              its stored image immediately. Captures you never save are held in memory
+              only and are gone when you close the editor.
             </p>
           </Section>
 
@@ -113,7 +163,13 @@ export default function Privacy() {
             <p>
               Only Screen &amp; System Audio Recording, which macOS requires
               before any app may read the contents of your display. It is used
-              solely to take the screenshot you asked for.
+              solely to take the screenshot you asked for. Despite the name of
+              the permission, the app captures no audio and no video — it has no
+              code for either.
+            </p>
+            <p>
+              It asks for nothing else: no camera, no microphone, no location, no
+              contacts, no accessibility access, and no account of any kind.
             </p>
           </Section>
 
